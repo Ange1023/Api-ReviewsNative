@@ -4,17 +4,16 @@ import authService from "./authService.js";
 
 class UserService {
 
-    async createUser({ email, password, name, lastName, createdGroups, followedGroups, favoriteRecipes, profileImage }) {
+    async createUser({ email, password, name, lastName,profileImage }) {
         
         const data = await authService.signUp({
             email,
             password,
             name,
             lastName,
-            createdGroups,
-            followedGroups,
-            favoriteRecipes,
-            profileImage
+            profileImage,
+            userName,
+            role,
         });
 
         if (!data) throw new AppError(400, "Error al crear el usuario", "UserService", "createUser");
@@ -49,20 +48,6 @@ class UserService {
         const data = await UserModel.getAllUsers();
 
         if (!data) throw new AppError("No users found", 404, null);
-
-        return data;
-    }
-
-    async toggleFavorite(userId, recipeId) {
-        const data = await UserModel.toggleFavoriteRecipe(userId, recipeId);
-        if (!data) throw new AppError("User not found", 404, null);
-
-        return data;
-    }
-
-    async toggleFollowUser(currentUserId, targetUserId) {
-        const data = await UserModel.toggleFollowUser(currentUserId, targetUserId);
-        if (!data) throw new AppError("User not found", 404, null);
 
         return data;
     }

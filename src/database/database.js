@@ -9,7 +9,7 @@ class database {
     async connect() {
         try {
             moongose.set('strictQuery', true); // Configura strictQuery explícitamente
-            await moongose.connect(process.env.API_RECETAS_NATIVE_MONGODB_URI);
+            await moongose.connect(process.env.API_REVIEWS_NATIVE_MONGODB_URI);
         } catch (error) {
             console.error("Error connecting to database:", error);
         }

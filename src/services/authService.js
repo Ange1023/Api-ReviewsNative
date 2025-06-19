@@ -8,7 +8,7 @@ export function generateToken(payload){
 
     if (!payload) throw new AppError("Payload is required to generate token");
 
-    const token = jwt.sign(payload, process.env.API_RECETAS_NATIVE_JWT_SECRET, { expiresIn: process.env.API_RECETAS_NATIVE_JWT_EXPIRES_IN });
+    const token = jwt.sign(payload, process.env.API_REVIEWS_NATIVE_JWT_SECRET, { expiresIn: process.env.API_REVIEWS_NATIVE_JWT_EXPIRES_IN });
 
     if(!token) throw new AppError("Token generation failed", 500);
 
@@ -22,7 +22,7 @@ export function verifyToken(req, res, next){
     
     if (!token) throw new AppError("Token is required", 401);
 
-    const decoded = jwt.verify(token, process.env.API_RECETAS_NATIVE_JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.API_REVIEWS_NATIVE_JWT_SECRET);
     req.user = decoded;
     next();
     
@@ -30,7 +30,7 @@ export function verifyToken(req, res, next){
 
 class authService {
 
-    async signUp({ email, password, name, lastName, createdGroups, followedGroups, favoriteRecipes, profileImage  }) {
+    async signUp({ email, password, name, lastName, profileImage, role, userName }) {
 
         const existingUser = await UserModel.getOne({ email });
 
@@ -41,12 +41,11 @@ class authService {
         const data = await UserModel.createUser({
             email,
             password: hashedPassword,
-            name,
-            lastName,
-            createdGroups: createdGroups || [],
-            followedGroups: followedGroups || [],
-            favoriteRecipes: favoriteRecipes || [],
-            profileImage
+            first_name: name,
+            last_name: lastName,
+            user_name: userName,
+            role,
+            avatar: profileImage
         });
         
         if (!data) throw new AppError("User creation failed", 500);
@@ -68,7 +67,7 @@ class authService {
 
         if(user.deletedAt) throw new AppError("This user is deleted has account, if you want to recover it, please contact us", 401);
         
-        const token = generateToken({ email: user.email });
+        const token = generateToken({ email: user.email , userId: user._id });
 
         if (!token) throw new AppError("Token generation failed", 500);
 

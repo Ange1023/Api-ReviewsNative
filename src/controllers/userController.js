@@ -42,29 +42,6 @@ class userController {
         });
     });
 
-    toggleFavorite = catchAsync(async (req, res, next) => {
-        const { recipeId, user_id } = req.body;
-        const user = await userService.toggleFavorite(user_id, recipeId);
-        if (!user) {
-            return sendResponse(res, 404, "Usuario no encontrado", null);
-        }
-        sendResponse(res, 200, "Receta actualizada en favoritos exitosamente", {
-            user,
-        });
-    });
-
-    toggleFollowUser = catchAsync(async (req, res, next) => {
-        const { target_user_id,current_user_id } = req.body;
-
-        const user = await userService.toggleFollowUser(current_user_id, target_user_id);
-        if (!user) {
-            return sendResponse(res, 404, "Usuario no encontrado", null);
-        }
-        sendResponse(res, 200, "Usuario seguido/deseguido exitosamente", {
-            user,
-        });
-    });
-
     getProfile = catchAsync(async (req, res, next) => {
         const user = await userService.getProfile(req.params.id);
         if (!user) {
