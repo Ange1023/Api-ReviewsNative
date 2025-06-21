@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const movieSchema = new mongoose.Schema({
+const serieSchema = new mongoose.Schema({
 
     tmdb_id: { 
         type: Number, 
@@ -18,21 +18,38 @@ const movieSchema = new mongoose.Schema({
         type: String,
         maxlength: [2000, 'La sinopsis no puede exceder 2000 caracteres']
     },
-    release_date: { 
+    first_air_date: {
         type: String,
         validate: {
-        validator: function(v) {
-            // Permite vacío o formato YYYY-MM-DD
-            return !v || /^\d{4}-\d{2}-\d{2}$/.test(v);
-        },
-        message: props => `${props.value} no es una fecha válida (YYYY-MM-DD)`
+            validator: function(v) {
+                // Permite vacío o formato YYYY-MM-DD
+                return !v || /^\d{4}-\d{2}-\d{2}$/.test(v);
+            },
+            message: props => `${props.value} no es una fecha válida (YYYY-MM-DD)`
         }
     },
-    runtime: { 
-        type: Number,
-        min: [1, 'La duración debe ser mayor que 0'],
-        max: [1000, 'La duración no puede exceder 1000 minutos']
+    last_air_date: {
+        type: String,
+        validate: {
+            validator: function(v) {
+                // Permite vacío o formato YYYY-MM-DD
+                return !v || /^\d{4}-\d{2}-\d{2}$/.test(v);
+            },
+            message: props => `${props.value} no es una fecha válida (YYYY-MM-DD)`
+        }
     },
+    
+    seasons_count: {
+        type: Number,
+        min: [1, 'El número de temporadas debe ser al menos 1'],
+        max: [100, 'El número de temporadas no puede exceder 100']
+    },
+    episodes_count: {
+        type: Number,
+        min: [1, 'El número de episodios debe ser al menos 1'],
+        max: [10000, 'El número de episodios no puede exceder 10000']
+    },
+
     poster_path: { 
         type: String,
         required: [true, 'La URL de la imagen es obligatoria'],
@@ -90,4 +107,4 @@ const movieSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now }
 });
 
-export default mongoose.model("Movie", movieSchema);
+export default mongoose.model("Serie", serieSchema);

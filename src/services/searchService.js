@@ -1,21 +1,64 @@
 
 import  tmdbApi  from '../utils/tmdbApi.js';
+import { AppError } from '../utils/appError.js';
 
 class SearchService {
     async searchMoviesByName(body) {
         const { name, page } = body;
         if (!name) {
-            throw new Error("El nombre de la película es requerido");
+            throw new AppError("El nombre de la película es requerido", 400);
         }
-        return await tmdbApi.searchMovies(name, page)
+        const res = await tmdbApi.searchMovies(name, page)
+
+        const customResult ={
+            totalItems: res.total_results,
+            currentPage: res.page,
+            totalPages: res.total_pages,
+            results: res.results.map(movie => ({
+                id: movie.id,
+                title: movie.title,
+                release_date: movie.release_date,
+                poster_path: movie.poster_path || movie.backdrop_path,
+                user_rating: 0,
+                critic_rating: 0,
+                total_rating: 0,
+            }))
+        }
+
+        if (customResult.totalItems === 0) {
+            throw new AppError("No se encontraron películas con ese nombre", 404);
+        }
+
+        return customResult;
     }
 
     async searchSeriesByName(body) {
         const { name, page } = body;
         if (!name) {
-            throw new Error("El nombre de la serie es requerido");
+            throw new AppError("El nombre de la serie es requerido", 400);
         }
-        return await tmdbApi.searchSeries(name, page)
+        const res =  await tmdbApi.searchSeries(name, page)
+
+        const customResult ={
+            totalItems: res.total_results,
+            currentPage: res.page,
+            totalPages: res.total_pages,
+            results: res.results.map(serie => ({
+                id: serie.id,
+                title: serie.name,
+                release_date: serie.first_air_date,
+                poster_path: serie.poster_path || serie.backdrop_path,
+                user_rating: 0,
+                critic_rating: 0,
+                total_rating: 0,
+            }))
+        }
+
+        if (customResult.totalItems === 0) {
+            throw new AppError("No se encontraron series con ese nombre", 404);
+        }
+
+        return customResult;
     }
 }
 export default new SearchService();

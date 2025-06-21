@@ -11,7 +11,7 @@ class TmdbApi {
     async fetchFromTmdb(endpoint, params = {}) {
         const url = new URL(this.baseUrl + endpoint);
 
-        params.language = this.language;
+        // params.language = this.language;
 
         Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -43,6 +43,27 @@ class TmdbApi {
         if (!query) throw new AppError('Query is required',400);
         return this.fetchFromTmdb('/search/tv', { query, page});
     }
+
+    async getMovieDetails(id) {
+        if (!id) throw new AppError('Movie ID is required', 400);
+        return this.fetchFromTmdb(`/movie/${id}`);
+    }
+
+    async getSerieDetails(id) {
+        if (!id) throw new AppError('Series ID is required', 400);
+        return this.fetchFromTmdb(`/tv/${id}`);
+    }
+
+    async getMovieCredits(id) {
+        if (!id) throw new AppError('Movie ID is required', 400);
+        return this.fetchFromTmdb(`/movie/${id}/credits`);
+    }
+
+    async getSerieCredits(id) {
+        if (!id) throw new AppError('Series ID is required', 400);
+        return this.fetchFromTmdb(`/tv/${id}/credits`);
+    }
+
 }
 
 export default new TmdbApi();
