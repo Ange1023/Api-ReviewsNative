@@ -1,5 +1,6 @@
 import serieModel from '../models/serie.js';
 import categoryModel from '../schemas/category.js';
+import mediaIdModel from '../models/mediaId.js';
 import  tmdbApi  from '../utils/tmdbApi.js';
 import { AppError } from '../utils/appError.js';
 
@@ -24,13 +25,15 @@ class SerieService {
 
     async getSerieByTmdbId(tmdbId) {
 
-        const serie = await serieModel.findOne({ tmdb_id: tmdbId });
+        const serieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'serie' });
 
-        if (!serie) {
+        if (!serieId) {
 
             const tmdbSerie = await tmdbApi.getSerieDetails(tmdbId);
 
             if (!tmdbSerie) throw new AppError("No se encontró la serie en TMDB", 404);
+
+            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'serie'})
 
             const categoriesData = await categoryModel.find({ tmdb_id: { $in: tmdbSerie.genres.map(genre => genre.id) } }).select('_id');
 
@@ -58,6 +61,8 @@ class SerieService {
 
             return await serieModel.create(serieData);
         }
+
+        const serie = await serieModel.findByFilter({ tmdb_id: serieId.tmdb_id });
         
         return serie;
     }

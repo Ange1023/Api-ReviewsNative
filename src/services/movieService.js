@@ -1,5 +1,6 @@
 import movieModel from '../models/movie.js';
 import categoryModel from '../schemas/category.js';
+import mediaIdModel from '../models/mediaId.js';
 import  tmdbApi  from '../utils/tmdbApi.js';
 import { AppError } from '../utils/appError.js';
 
@@ -24,13 +25,15 @@ class MovieService {
 
     async getMovieByTmdbId(tmdbId) {
 
-        const movie = await movieModel.findOne({ tmdb_id: tmdbId });
+        const movieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'movie' });
 
-        if (!movie) {
+        if (!movieId) {
 
             const tmdbMovie = await tmdbApi.getMovieDetails(tmdbId);
 
             if (!tmdbMovie) throw new AppError("No se encontró la película en TMDB", 404);
+
+            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'movie'})
 
             const categoriesData = await categoryModel.find({ tmdb_id: { $in: tmdbMovie.genres.map(genre => genre.id) } }).select('_id');
 
@@ -72,10 +75,12 @@ class MovieService {
                 critic_rating: 0,
                 total_rating: 0,
             };
-
+            
             return await movieModel.create(movieData);
         }
         
+        const movie = await movieModel.findByFilter({ tmdb_id: movieId.tmdb_id });
+
         return movie;
     }
 
