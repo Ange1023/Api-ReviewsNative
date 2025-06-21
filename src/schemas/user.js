@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         match: [/.+@.+\..+/, 'Invalid email format'], 
     },
     avatar: {
-        default: '', // URL por defecto
+        default: 'https://i.postimg.cc/MHw8VCDs/Captura-de-pantalla-2025-06-21-100631.png', // URL por defecto
         type: String,
         validate: {
             validator: function (url) {

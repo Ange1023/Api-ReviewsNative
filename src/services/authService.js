@@ -30,7 +30,7 @@ export function verifyToken(req, res, next){
 
 class authService {
 
-    async signUp({ email, password, name, lastName, profileImage, role, userName }) {
+    async signUp({ email, password, first_name, last_name, avatar, role, user_name }) {
 
         const existingUser = await UserModel.getOne({ email });
 
@@ -41,11 +41,11 @@ class authService {
         const data = await UserModel.createUser({
             email,
             password: hashedPassword,
-            first_name: name,
-            last_name: lastName,
-            user_name: userName,
+            first_name,
+            last_name,
+            user_name,
             role,
-            avatar: profileImage
+            avatar
         });
         
         if (!data) throw new AppError("User creation failed", 500);

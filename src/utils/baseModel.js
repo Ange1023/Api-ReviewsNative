@@ -29,6 +29,10 @@ export default class BaseModel {
         return await this.model.find();
     }
 
+    async findByFilter(filter){
+        return await this.model.find(filter);
+    }
+
     async findOne(filter) {
         return await this.model.findOne(filter);
     }

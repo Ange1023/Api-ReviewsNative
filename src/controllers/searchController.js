@@ -20,6 +20,14 @@ class searchController  {
         });
     });
 
+    searchByCategories = catchAsync(async (req, res, next) => {
+
+        const data = await searchService.searchByCategories(req.body);
+        sendResponse(res, 200, "Categorías encontradas exitosamente", {
+            data,
+        });
+    });
+
 }
 
 export default new searchController();

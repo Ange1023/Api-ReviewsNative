@@ -44,6 +44,24 @@ class TmdbApi {
         return this.fetchFromTmdb('/search/tv', { query, page});
     }
 
+    async discoverMovies({ genres = '', language = this.language, page = 1 } = {}) {
+        // genres debe ser un string como '28|12|35'
+        return this.fetchFromTmdb('/discover/movie', {
+            language,
+            with_genres: genres,
+            page
+        });
+    }
+
+    async discoverSeries({ genres = '', language = this.language, page = 1 } = {}) {
+        // genres debe ser un string como '28|12|35'
+        return this.fetchFromTmdb('/discover/tv', {
+            language,
+            with_genres: genres,
+            page
+        });
+    }
+
     async getMovieDetails(id) {
         if (!id) throw new AppError('Movie ID is required', 400);
         return this.fetchFromTmdb(`/movie/${id}`);

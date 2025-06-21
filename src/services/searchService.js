@@ -1,5 +1,6 @@
 
 import  tmdbApi  from '../utils/tmdbApi.js';
+import categoryModel from '../models/category.js';
 import { AppError } from '../utils/appError.js';
 
 class SearchService {
@@ -59,6 +60,18 @@ class SearchService {
         }
 
         return customResult;
+    }
+
+
+    async searchByCategories(body) {
+        const { categories } = body;
+        
+        if (!categories || categories.length === 0) throw new AppError("Las categorías son requeridas", 400);
+        
+        const categoryData = categoryModel.findByFilter({ _id: { $in: categories } })
+
+        console.log(categoryData);
+        
     }
 }
 export default new SearchService();
