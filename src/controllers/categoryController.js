@@ -23,6 +23,27 @@ class categoryController {
             categories,
         });
     });
+
+    getAllMovies = catchAsync(async (req, res, next) => {
+        const categories = await categoryService.getAllMoviesCategories();
+        if (!categories || categories.length === 0) {
+            return sendResponse(res, 404, "No se encontraron categorías de películas", null);
+        }
+        sendResponse(res, 200, "Categorías de películas encontradas exitosamente", {
+            categories,
+        });
+    });
+
+    getAllSeries = catchAsync(async (req, res, next) => {
+        const categories = await categoryService.getAllSeriesCategories();
+        if (!categories || categories.length === 0) {
+            return sendResponse(res, 404, "No se encontraron categorías de series", null);
+        }
+        sendResponse(res, 200, "Categorías de series encontradas exitosamente", {
+            categories,
+        });
+    });
+    
 }
 
 export default new categoryController();

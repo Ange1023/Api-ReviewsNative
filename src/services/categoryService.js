@@ -1,25 +1,29 @@
 import CategoryModel from '../models/category.js';
-import { AppError } from '../utils/appError.js';
 
 class CategoryService {
 
     async createCategory(categoryData) {
-        const data = await CategoryModel.create(categoryData);
-        if (!data) throw new AppError(400, 'Error al crear la categoría', 'CategoryService', 'createCategory');
-        return data;
+        return await CategoryModel.create(categoryData);
+
     }
 
     async deleteCategory(categoryId) {
-        const data = await CategoryModel.delete(categoryId);
-        if (!data) throw new AppError(404, 'Categoría no encontrada', 'CategoryService', 'deleteCategory');
-        return data;
+        return await CategoryModel.delete(categoryId);
+
     }
 
     async getAllCategories() {
-        const data = await CategoryModel.findAll();
-        if (!data || data.length === 0) throw new AppError(404, 'No se encontraron categorías', 'CategoryService', 'getAllCategories');
-        return data;
+        return await CategoryModel.findAll();
     }
+
+    async getAllMoviesCategories() {
+        return await CategoryModel.getAllMovies();
+    }
+
+    async getAllSeriesCategories() {
+        return await CategoryModel.getAllSeries();
+    }
+
 }
 
 export default new CategoryService();

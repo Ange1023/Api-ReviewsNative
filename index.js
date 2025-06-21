@@ -8,6 +8,7 @@ import database from "./src/database/database.js";
 import { errorMiddleware } from "./src/utils/appError.js";
 import uploadRoute from "./src/routes/upload.js";
 import categoryRoutes from "./src/routes/categoryRoutes.js";
+import searchRoutes from "./src/routes/searchRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -21,6 +22,7 @@ app.use('/api', uploadRoute);
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/categories",categoryRoutes)
+app.use("/search", searchRoutes);
 
 // Middleware de errores (si algo falla, pasa a errorMiddleware)
 app.use(errorMiddleware);
