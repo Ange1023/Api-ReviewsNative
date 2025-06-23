@@ -44,8 +44,8 @@ class TmdbApi {
         return this.fetchFromTmdb('/search/tv', { query, page});
     }
 
-    async discoverMovies({ genres = '', language = this.language, page = 1 } = {}) {
-        // genres debe ser un string como '28|12|35'
+    async discoverMovies(genres = '', page = 1, language = this.language) {
+
         return this.fetchFromTmdb('/discover/movie', {
             language,
             with_genres: genres,
@@ -53,8 +53,8 @@ class TmdbApi {
         });
     }
 
-    async discoverSeries({ genres = '', language = this.language, page = 1 } = {}) {
-        // genres debe ser un string como '28|12|35'
+    async discoverSeries(genres = '', page = 1, language = this.language) {
+
         return this.fetchFromTmdb('/discover/tv', {
             language,
             with_genres: genres,

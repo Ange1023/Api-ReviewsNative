@@ -11,6 +11,7 @@ import categoryRoutes from "./src/routes/categoryRoutes.js";
 import searchRoutes from "./src/routes/searchRoutes.js";
 import movieRoutes from "./src/routes/movieRoutes.js";
 import serieRoutes from "./src/routes/serieRoutes.js";
+import commentRoutes from "./src/routes/commentRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -27,6 +28,8 @@ app.use("/categories",categoryRoutes)
 app.use("/search", searchRoutes);
 app.use("/movie", movieRoutes); 
 app.use("/serie", serieRoutes); 
+app.use("/comment",commentRoutes )
+
 
 // Middleware de errores (si algo falla, pasa a errorMiddleware)
 app.use(errorMiddleware);

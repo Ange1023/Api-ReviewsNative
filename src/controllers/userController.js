@@ -1,6 +1,7 @@
 
 import userService from "../services/userService.js";
 import { catchAsync, sendResponse } from "../utils/appError.js";
+
 class userController {
     
     create = catchAsync(async (req, res, next) => {
