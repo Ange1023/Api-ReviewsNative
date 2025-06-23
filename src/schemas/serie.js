@@ -89,19 +89,19 @@ const serieSchema = new mongoose.Schema({
         type: Number, 
         default: 0,
         min: [0, 'La calificación de usuario no puede ser negativa'],
-        max: [5, 'La calificación de usuario no puede ser mayor que 5']
+        max: [100, 'La calificación de usuario no puede ser mayor que 5']
     },
     critic_rating: { 
         type: Number, 
         default: 0,
         min: [0, 'La calificación de críticos no puede ser negativa'],
-        max: [5, 'La calificación de críticos no puede ser mayor que 5']
+        max: [100, 'La calificación de críticos no puede ser mayor que 5']
     },
     total_rating: { 
         type: Number, 
         default: 0,
         min: [0, 'La calificación total no puede ser negativa'],
-        max: [5, 'La calificación total no puede ser mayor que 5']
+        max: [100, 'La calificación total no puede ser mayor que 5']
     },
 
     created_at: { type: Date, default: Date.now }
