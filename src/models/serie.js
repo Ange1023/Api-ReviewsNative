@@ -15,7 +15,8 @@ class serieModel extends BaseModel {
         const totalItems = await this.model.countDocuments(filter);
 
         const results = data.map(serie => ({
-            id: serie.id,
+            id: serie._id,
+            tmdb_id: serie.tmdb_id,
             title: serie.title,
             release_date: serie.first_air_date,
             poster_path: serie.poster_path || serie.backdrop_path,

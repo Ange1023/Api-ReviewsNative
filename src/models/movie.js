@@ -16,6 +16,7 @@ class movieModel extends BaseModel {
 
         const results = data.map(movie => ({
             id: movie._id,
+            tmdb_id: movie.tmdb_id,
             title: movie.title,
             release_date: movie.release_date,
             poster_path: movie.poster_path,
