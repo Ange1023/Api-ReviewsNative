@@ -14,7 +14,7 @@ class serieController {
     delete = catchAsync(async (req, res, next) => {
         const { id } = req.params;
         await serieService.deleteSerie(id);
-        sendResponse(res, 204, 'Serie eliminada exitosamente');
+        sendResponse(res, 200, 'Serie eliminada exitosamente');
     });
 
 
@@ -38,9 +38,23 @@ class serieController {
 
     getAll = catchAsync(async (req, res, next) => {
         const data = await serieService.getAllSeries();
+        if (!data || data.length === 0) {
+            return sendResponse(res, 404, 'No se encontraron series', null);
+        }
         sendResponse(res, 200, 'Series encontradas exitosamente', {
             data,
         });
+    });
+
+    getPaginated = catchAsync(async (req, res, next) => {
+        const { currentPage = 1, limit = 10, ...filters } = req.body;
+        const options = { currentPage: parseInt(currentPage), limit: parseInt(limit) };
+
+        const result = await serieService.paginateSeries(filters, options);
+
+        if (!result) return sendResponse(res, 404, 'No se encontraron series', null);
+        
+        sendResponse(res, 200, 'Series paginadas', result);
     });
 }
 export default new serieController();

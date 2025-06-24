@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/:id", movieController.getByTmdbId); 
 router.get("/", movieController.getAll);
+router.post("/paginate", movieController.getPaginated);
 router.post("/", movieController.create);
 router.delete("/:id", movieController.delete);
 

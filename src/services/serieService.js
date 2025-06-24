@@ -66,6 +66,11 @@ class SerieService {
         
         return serie;
     }
+    async paginateSeries(filter = {}, options = { currentPage: 1, limit: 10 }) {
+            
+        const data = await serieModel.paginate(filter, options);
+        return data;
+    }
 
 
 }

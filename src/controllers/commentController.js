@@ -19,6 +19,8 @@ class CommentController {
 
     getAll = catchAsync(async (req, res, next) => {
         const comments = await commentService.getAllComments();
+
+        if (!comments || comments.length === 0) return sendResponse(res, 404, "No se encontraron comentarios", null);
         sendResponse(res, 200, "Comentarios encontrados exitosamente", { comments });
     });
 

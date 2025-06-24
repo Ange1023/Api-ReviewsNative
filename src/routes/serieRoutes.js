@@ -7,6 +7,7 @@ router.get("/:id", serieController.getByTmdbId);
 router.get("/", serieController.getAll);
 router.post("/", serieController.create);
 router.delete("/:id", serieController.delete);
+router.post("/paginate", serieController.getPaginated);
 
 
 export default router;

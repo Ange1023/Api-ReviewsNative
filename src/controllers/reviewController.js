@@ -20,6 +20,7 @@ class ReviewController {
 
     getAllReviews = catchAsync(async (req, res, next) => {
         const data = await reviewService.getAllReviews();
+        if (!data || data.length === 0) return sendResponse(res, 404, "No se encontraron reseñas", null);
         sendResponse(res, 200, "Reseñas obtenidas exitosamente", { data });
     });
 

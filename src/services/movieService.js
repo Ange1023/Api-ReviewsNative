@@ -84,6 +84,11 @@ class MovieService {
         return movie;
     }
 
+    async paginateMovies(filter = {}, options = { currentPage: 1, limit: 10 }) {
+        
+        const data = await movieModel.paginate(filter, options);
+        return data;
+    }
 
 }
 
