@@ -25,7 +25,7 @@ class MovieService {
 
     async getMovieByTmdbId(tmdbId) {
 
-        const movieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'movie' });
+        let movieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'movie' });
 
         if (!movieId) {
 
@@ -76,11 +76,14 @@ class MovieService {
                 total_rating: 0,
             };
             
-            return await movieModel.create(movieData);
+            await movieModel.create(movieData);
+            // Buscar el movieId actualizado
+            movieId = await mediaIdModel.findOne({ tmdb_id: tmdbMovie.id, media_type: 'movie' });
         }
         
-        const movie = await movieModel.findByFilter({ tmdb_id: movieId.tmdb_id });
-
+        const movie = await movieModel.findOne({ tmdb_id: movieId.tmdb_id });
+        if (!movie) return null;
+        await movie.populate('categories', 'name');
         return movie;
     }
 
