@@ -3,7 +3,7 @@ import CommentController from '../controllers/commentController.js';
 
 const router = express.Router();
 
-router.post('/paginated', CommentController.getPaginated); 
+router.post('/paginate', CommentController.getPaginated); 
 
 router.route('/')
     .post(CommentController.create)
