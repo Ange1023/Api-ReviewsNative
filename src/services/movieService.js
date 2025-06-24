@@ -82,7 +82,7 @@ class MovieService {
         }
         
         const movie = await movieModel.findOne({ tmdb_id: movieId.tmdb_id });
-        if (!movie) return null;
+        if (!movie) return AppError("No se encontró la película en la base de datos", 404);
         await movie.populate('categories', 'name');
         return movie;
     }

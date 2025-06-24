@@ -25,7 +25,7 @@ class SerieService {
 
     async getSerieByTmdbId(tmdbId) {
 
-        const serieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'serie' });
+        let serieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'serie' });
 
         if (!serieId) {
 
@@ -59,11 +59,13 @@ class SerieService {
                 total_rating: 0,
             };
 
-            return await serieModel.create(serieData);
-        }
+            await serieModel.create(serieData);
 
-        const serie = await serieModel.findByFilter({ tmdb_id: serieId.tmdb_id });
-        
+            serieId = await mediaIdModel.findOne({ tmdb_id: tmdbSerie.id, media_type: 'serie' });
+        }
+        const serie = await serieModel.findOne({ tmdb_id: serieId.tmdb_id  })
+        if (!serie) throw new AppError("No se encontró la serie en la base de datos", 404);
+        await serie.populate('categories', 'name');
         return serie;
     }
     async paginateSeries(filter = {}, options = { currentPage: 1, limit: 10 }) {
