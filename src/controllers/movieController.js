@@ -47,8 +47,8 @@ class movieController {
     });
 
     getPaginated = catchAsync(async (req, res, next) => {
-        const { currentPage = 1, limit = 10, ...filters } = req.body;
-        const options = { currentPage: parseInt(currentPage), limit: parseInt(limit) };
+        const { currentPage = 1, limit = 10 , sortByRating = false, sortByDate = false, ...filters } = req.body;
+        const options = { currentPage: parseInt(currentPage), limit: parseInt(limit), sortByRating , sortByDate};
 
         const result = await movieService.paginateMovies(filters, options);
 
