@@ -7,11 +7,18 @@ class movieModel extends BaseModel {
         super(Movie);
     }
 
-    paginate = async (filter = {}, options = { currentPage: 1, limit: 10 }) => { 
+    paginate = async (filter = {}, options = { currentPage: 1, limit: 10, sortByRating }) => {
+
+        let sort = null;
         const { currentPage, limit } = options;
         const skip = (currentPage - 1) * limit;
 
-        const data = await this.model.find(filter).skip(skip).limit(limit);
+
+        if(options.sortByRating) sort = {total_rating: -1}
+
+        if(options.sortByDate) sort = {release_date: -1};
+
+        const data = await this.model.find(filter).sort(sort).skip(skip).limit(limit);
         const totalItems = await this.model.countDocuments(filter);
 
         const results = data.map(movie => ({
