@@ -67,11 +67,11 @@ class authService {
 
         if(user.deletedAt) throw new AppError("This user is deleted has account, if you want to recover it, please contact us", 401);
         
-        const token = generateToken({ email: user.email , userId: user._id });
+        const token = generateToken({ email: user.email , user_id: user._id });
 
         if (!token) throw new AppError("Token generation failed", 500);
 
-        return {token, userId: user._id };
+        return {token};
 
     }
 
