@@ -12,7 +12,7 @@ class userController {
     });
 
     update = catchAsync(async (req, res, next) => {
-        const user = await userService.updateUser(req.user.userId, req.body);
+        const user = await userService.updateUser(req.user.user_id, req.body);
         if (!user) {
             return sendResponse(res, 404, "Usuario no encontrado", null);
         }
@@ -22,7 +22,7 @@ class userController {
     });
 
     delete = catchAsync(async (req, res, next) => {
-        await userService.deleteUser(req.user.userId);
+        await userService.deleteUser(req.user.user_id);
         if (!user) {
             return sendResponse(res, 404, "Usuario no encontrado", null);
         }
@@ -31,7 +31,7 @@ class userController {
 
     getOne = catchAsync(async (req, res, next) => {
 
-        const user = await userService.getUserById(req.user.userId);
+        const user = await userService.getUserById(req.user.user_id);
         sendResponse(res, 200, "Usuario encontrado exitosamente", {
             user,
         });
@@ -45,7 +45,7 @@ class userController {
     });
 
     getProfile = catchAsync(async (req, res, next) => {
-        const user = await userService.getProfile(req.user.userId);
+        const user = await userService.getProfile(req.user.user_id);
         if (!user) {
             return sendResponse(res, 404, "Usuario no encontrado", null);
         }
@@ -55,7 +55,9 @@ class userController {
     });
 
     updateUserProfile = catchAsync(async (req, res, next) => {
-        const user = await userService.updateUserProfile(req.user.userId, req.body);
+
+        const user = await userService.updateUserProfile(req.user.user_id, req.body);
+        
         if (!user) {
             return sendResponse(res, 404, "Usuario no encontrado", null);
         }
@@ -65,7 +67,7 @@ class userController {
     });
     
     softDelete = catchAsync(async (req, res, next) => {
-        const user = await userService.softDeleteUser(req.user.userId);
+        const user = await userService.softDeleteUser(req.user.user_id);
         if (!user) {
             return sendResponse(res, 404, "Usuario no encontrado", null);
         }

@@ -7,7 +7,7 @@ const router = express.Router();
 // CRUD Básico (heredado de BaseController)
 router.get('/all', UserController.getAll)
 router.put('/softDelete/:id', verifyToken, UserController.softDelete); // PUT /users/softDelete/:id
-router.put('/profile/:id', verifyToken, UserController.updateUserProfile); // PATCH /users/settings/:id
+router.put('/profile', verifyToken, UserController.updateUserProfile); // PATCH /users/settings/:id
 router.post('/', UserController.create);  // POST /users
 
 router.route('/')
