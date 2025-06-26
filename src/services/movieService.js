@@ -22,15 +22,18 @@ class MovieService {
     async getMovieById(movieId) {
         return await movieModel.findById(movieId);
     }
-
+    //CORREGIR URGENTEMENTE
     async getMovieByTmdbId(tmdbId) {
 
         let movieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'movie' });
-
+        console.log(movieId, 'movieId');
+        
         if (!movieId) {
 
             const tmdbMovie = await tmdbApi.getMovieDetails(tmdbId);
 
+            console.log(tmdbMovie, 'tmdbMovie');
+            
             if (!tmdbMovie) throw new AppError("No se encontró la película en TMDB", 404);
 
             await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'movie'})
@@ -79,10 +82,12 @@ class MovieService {
             await movieModel.create(movieData);
             // Buscar el movieId actualizado
             movieId = await mediaIdModel.findOne({ tmdb_id: tmdbMovie.id, media_type: 'movie' });
+            console.log(movieId);
+            
         }
         
         const movie = await movieModel.findOne({ tmdb_id: movieId.tmdb_id });
-        if (!movie) return AppError("No se encontró la película en la base de datos", 404);
+        if (!movie) return new AppError("No se encontró la película en la base de datos", 404);
         await movie.populate('categories', 'name');
         return movie;
     }
