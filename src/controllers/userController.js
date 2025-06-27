@@ -23,9 +23,6 @@ class userController {
 
     delete = catchAsync(async (req, res, next) => {
         await userService.deleteUser(req.user.user_id);
-        if (!user) {
-            return sendResponse(res, 404, "Usuario no encontrado", null);
-        }
         sendResponse(res, 200, "Usuario eliminado exitosamente", null);
     });
 
