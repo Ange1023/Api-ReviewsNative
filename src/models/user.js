@@ -41,21 +41,20 @@ class userModel extends BaseModel {
         if (!user) return null;
 
 
-        if (userData.password && userData.newPassword) {
+        if (userData.current_password && userData.new_password) {
 
-            const samePassword = await bcrypt.compare(userData.password, user.password);
+            const samePassword = await bcrypt.compare(userData.current_password, user.password);
 
             if (samePassword) {
-                user.password = await bcrypt.hash(userData.newPassword, 10);
+                user.password = await bcrypt.hash(userData.new_password, 10);
             }
         }
 
-        if (userData.name) user.first_name = userData.name;
-        if (userData.lastName) user.last_name = userData.lastName;
+        if (userData.first_name) user.first_name = userData.first_name;
+        if (userData.last_name) user.last_name = userData.last_name;
         if (userData.email) user.email = userData.email;
-        if (userData.profileImage) user.avatar = userData.profileImage;
-        if (userData.role) user.role = userData.role;
-        if (userData.userName) user.user_name = userData.userName;
+        if (userData.avatar) user.avatar = userData.avatar;
+        if (userData.user_name) user.user_name = userData.user_name;
     
         return await user.save();
     }
