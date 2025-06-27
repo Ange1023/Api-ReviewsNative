@@ -1,12 +1,13 @@
 import express from "express";
 import CommentController from '../controllers/commentController.js';
+import { verifyToken } from "../services/authService.js";
 
 const router = express.Router();
 
-router.post('/paginate', CommentController.getPaginated); 
+router.post('/paginate',CommentController.getPaginated); 
 
 router.route('/')
-    .post(CommentController.create)
+    .post(verifyToken,CommentController.create)
     .get(CommentController.getAll) 
 
 router.route('/:id')

@@ -3,6 +3,13 @@ import { catchAsync, sendResponse } from "../utils/appError.js";
 
 class CommentController {
     create = catchAsync(async (req, res, next) => {
+
+        const user_id = req.user.user_id;
+
+        if (!user_id) return sendResponse(res, 400, "El ID del usuario es requerido", null);
+
+        req.body.user_id = user_id;
+
         const comment = await commentService.createComment(req.body);
         sendResponse(res, 201, "Comentario creado exitosamente", { comment });
     });
@@ -26,7 +33,7 @@ class CommentController {
 
     getPaginated = catchAsync(async (req, res, next) => {
 
-        const { page, limit, media_id, role } = req.body;
+        const { page, limit, media_id, role} = req.body;
 
         const comments = await commentService.getPaginatedComments(page, limit, media_id, role);
 

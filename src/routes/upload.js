@@ -46,23 +46,6 @@ function getCloudinaryFolder(type, metadata = {}) {
   switch (type) {
     case 'profile':
       return metadata.userId ? `users/${metadata.userId}/profiles` : 'users/profiles';
-
-    case 'recipe':
-      return metadata.recipeId ? `recipes/${metadata.recipeId}/cover` : 'recipes/cover';
-
-    case 'recipe_step':
-      return metadata.recipeId
-        ? `recipes/${metadata.recipeId}/steps/${metadata.stepId}`
-        : 'recipes/steps';
-
-    case 'group':
-      return metadata.groupId ? `groups/${metadata.groupId}` : 'groups';
-
-    case 'category':
-      return metadata.categoryName
-        ? `categories/${metadata.categoryName}`
-        : 'categories';
-
     default:
       return 'misc';
   }
