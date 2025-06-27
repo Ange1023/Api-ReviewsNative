@@ -36,32 +36,30 @@ class MovieService {
             
             if (!tmdbMovie) throw new AppError("No se encontró la película en TMDB", 404);
 
-            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'movie'})
-
             const categoriesData = await categoryModel.find({ tmdb_id: { $in: tmdbMovie.genres.map(genre => genre.id) } }).select('_id');
 
-            if (categoriesData.length === 0) throw new AppError("No se encontraron categorías para la película", 404);
-            
+            // Si no hay categorías, asigna un array vacío
+            const categories = categoriesData.length > 0 ? categoriesData : [];
+
             const castData = await tmdbApi.getMovieCredits(tmdbId);
 
-            if (!castData || !castData.cast) throw new AppError("No se encontraron actores para la película", 404);
+            // Si no hay cast, asigna un array vacío
+            const actors = castData && castData.cast
+                ? castData.cast.filter(person => person.known_for_department === 'Acting').map(actor => ({
+                    name: actor.name,
+                    role: 'Actor'
+                }))
+                : [];
 
-            const actors = castData.cast
-            .filter(person => person.known_for_department === 'Acting')
-            .map(actor => ({
-                name: actor.name,
-                role: 'Actor'
-            }));
-
-            const directors = castData.crew
-                .filter(person => person.job === 'Director')
-                .map(director => ({
+           const directors = castData && castData.crew
+                ? castData.crew.filter(person => person.job === 'Director').map(director => ({
                     name: director.name,
                     role: 'Director'
-            }));
+                }))
+                : [];
 
             const cast = [...actors, ...directors];
-            
+                        
             const movieData = {
                 tmdb_id: tmdbMovie.id,
                 title: tmdbMovie.title,
@@ -69,21 +67,19 @@ class MovieService {
                 release_date: tmdbMovie.release_date,
                 runtime: tmdbMovie.runtime,
                 poster_path: tmdbMovie.poster_path || tmdbMovie.backdrop_path,
-                categories: categoriesData,
-                cast: cast.map(person => ({
-                    name: person.name,
-                    role: person.role,
-                })),
+                categories: categories,
+                cast: cast,
                 user_rating: 0,
                 critic_rating: 0,
                 total_rating: 0,
             };
+
+            if (!movieData.poster_path) delete movieData.poster_path;
             
             await movieModel.create(movieData);
+            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'movie'})
             // Buscar el movieId actualizado
             movieId = await mediaIdModel.findOne({ tmdb_id: tmdbMovie.id, media_type: 'movie' });
-            console.log(movieId);
-            
         }
         
         const movie = await movieModel.findOne({ tmdb_id: movieId.tmdb_id });

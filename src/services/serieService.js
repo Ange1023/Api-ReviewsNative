@@ -33,13 +33,12 @@ class SerieService {
 
             if (!tmdbSerie) throw new AppError("No se encontró la serie en TMDB", 404);
 
-            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'serie'})
-
             const categoriesData = await categoryModel.find({ tmdb_id: { $in: tmdbSerie.genres.map(genre => genre.id) } }).select('_id');
+            // Si no hay categorías, asigna un array vacío
+            const categories = categoriesData.length > 0 ? categoriesData : [];
 
-            if (categoriesData.length === 0) throw new AppError("No se encontraron categorías para la serie", 404);
-            
-            
+            const poster_path = tmdbSerie.poster_path || tmdbSerie.backdrop_path;
+
             const serieData = {
                 tmdb_id: tmdbSerie.id,
                 title: tmdbSerie.name,
@@ -48,24 +47,28 @@ class SerieService {
                 last_air_date: tmdbSerie.last_air_date,
                 episodes_count: tmdbSerie.number_of_episodes,
                 seasons_count: tmdbSerie.number_of_seasons,
-                poster_path: tmdbSerie.poster_path || tmdbSerie.backdrop_path,
-                categories: categoriesData,
-                cast: tmdbSerie.created_by.map(person => ({
+                poster_path: poster_path,
+                categories: categories,
+                cast: tmdbSerie.created_by?.map(person => ({
                     name: person.name,
                     role: 'Creator',
-                })),
+                })) || [],
                 user_rating: 0,
                 critic_rating: 0,
                 total_rating: 0,
             };
 
+            if (poster_path) delete serieData.poster_path
+
             await serieModel.create(serieData);
+            await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'serie'})
 
             serieId = await mediaIdModel.findOne({ tmdb_id: tmdbSerie.id, media_type: 'serie' });
         }
-        const serie = await serieModel.findOne({ tmdb_id: serieId.tmdb_id  })
+        const serie = await serieModel.model
+            .findOne({ tmdb_id: serieId.tmdb_id })
+            .populate('categories', 'name');
         if (!serie) throw new AppError("No se encontró la serie en la base de datos", 404);
-        await serie.populate('categories', 'name');
         return serie;
     }
     async paginateSeries(filter = {}, options = { currentPage: 1, limit: 10 }) {

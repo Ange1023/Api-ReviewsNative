@@ -51,19 +51,11 @@ const serieSchema = new mongoose.Schema({
     },
 
     poster_path: { 
-        type: String,
-        required: [true, 'La URL de la imagen es obligatoria'],
+        type: String
     },
 
     categories: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
-            required: [true, 'Categories are required'],
-            validate: {
-                validator: function (categories) {
-                    return categories.length > 0;
-                },
-                message: 'At least one category is required',
-        },
     },
 
     cast:{
@@ -71,13 +63,11 @@ const serieSchema = new mongoose.Schema({
             {
                 name: {
                     type: String,
-                    required: [true, 'El nombre del actor/actriz es obligatorio'],
                     minlength: [1, 'El nombre no puede estar vacío'],
                     maxlength: [100, 'El nombre no puede exceder 100 caracteres']
                 },
                 role: {
                     type: String,
-                    required: [true, 'El rol del actor/actriz es obligatorio'],
                     minlength: [1, 'El rol no puede estar vacío'],
                     maxlength: [100, 'El rol no puede exceder 100 caracteres']
                 },
