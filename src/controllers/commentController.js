@@ -26,8 +26,6 @@ class CommentController {
 
     getAll = catchAsync(async (req, res, next) => {
         const comments = await commentService.getAllComments();
-
-        if (!comments || comments.length === 0) return sendResponse(res, 404, "No se encontraron comentarios", null);
         sendResponse(res, 200, "Comentarios encontrados exitosamente", { comments });
     });
 
@@ -36,8 +34,6 @@ class CommentController {
         const { page, limit, media_id, role} = req.body;
 
         const comments = await commentService.getPaginatedComments(page, limit, media_id, role);
-
-        if (!comments || comments.totalItems === 0) return sendResponse(res, 404, "No se encontraron comentarios para este medio", null);
         
         sendResponse(res, 200, "Comentarios paginados encontrados exitosamente", comments);
     });
