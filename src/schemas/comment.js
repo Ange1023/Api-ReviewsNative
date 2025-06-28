@@ -22,12 +22,7 @@ const commentSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    
-});
+} , { timestamps: true });
 
 commentSchema.pre('validate', function(next) {
     if (!this.movie_id && !this.serie_id) {
