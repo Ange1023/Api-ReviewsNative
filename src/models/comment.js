@@ -36,7 +36,7 @@ class CommentModel extends BaseModel {
                 id: c._id,
                 content: c.content,
                 createdAt: c.createdAt,
-                user_id: c.user_id._id,
+                updatedAt: c.updatedAt,
                 user_name: c.user_id.user_name,
                 avatar: c.user_id.avatar
             })),
