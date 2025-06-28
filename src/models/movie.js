@@ -7,7 +7,7 @@ class movieModel extends BaseModel {
         super(Movie);
     }
 
-    paginate = async (filter = {}, options = { currentPage: 1, limit: 10, sortByRating }) => {
+    paginate = async (filter = {}, options = { currentPage: 1, limit: 10, sortByRating, sortByDate }) => {
 
         let sort = null;
         const { currentPage, limit } = options;

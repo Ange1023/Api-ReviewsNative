@@ -71,7 +71,7 @@ class SerieService {
         if (!serie) throw new AppError("No se encontró la serie en la base de datos", 404);
         return serie;
     }
-    async paginateSeries(filter = {}, options = { currentPage: 1, limit: 10 }) {
+    async paginateSeries(filter = {}, options = { currentPage: 1, limit: 10, sortByRating, sortByDate }) {
             
         const data = await serieModel.paginate(filter, options);
         return data;
