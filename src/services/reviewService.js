@@ -46,15 +46,23 @@ class ReviewService {
 
         const review = await ReviewModel.findById(reviewId);
 
-        const { movie_id, serie_id } = review;
-
         if (!review) return null;
+
+        const { movie_id, serie_id } = review;
 
         const data = await ReviewModel.update(reviewId, reviewData);
 
         if (data) await ReviewModel.updatedRatings({ movie_id, serie_id });
 
         return data;
+    }
+
+    async getUserReview({ user_id, movie_id = null, serie_id = null }) {
+        if (!user_id || (!movie_id && !serie_id)) return null;
+        const filter = { user_id };
+        if (movie_id) filter.movie_id = movie_id;
+        if (serie_id) filter.serie_id = serie_id;
+        return await ReviewModel.findOne(filter);
     }
 }
 

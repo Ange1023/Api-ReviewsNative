@@ -4,6 +4,11 @@ import { catchAsync, sendResponse } from "../utils/appError.js";
 class ReviewController {
 
     createReview = catchAsync(async (req, res, next) => {
+
+        const userId = req.user.user_id;
+
+        req.body.user_id = userId;
+
         const reviewData = req.body;
         const data = await reviewService.createReview(reviewData);
         sendResponse(res, 201, "Reseña creada exitosamente", { data });
@@ -27,8 +32,20 @@ class ReviewController {
     updateReview = catchAsync(async (req, res, next) => {
         const reviewId = req.params.id;
         const reviewData = req.body;
+        
         const data = await reviewService.updateReview(reviewId, reviewData);
         sendResponse(res, 200, "Reseña actualizada exitosamente", { data });
+    });
+
+    getUserReview = catchAsync(async (req, res, next) => {
+
+        const userId = req.user.user_id;
+        req.body.user_id = userId;
+        const reviewData = req.body;
+
+        const data = await reviewService.getUserReview(reviewData);
+        if (!data) return sendResponse(res, 404, "Reseña no encontrada", null);
+        sendResponse(res, 200, "Reseña obtenida exitosamente", { data });
     });
 
 }
