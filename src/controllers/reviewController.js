@@ -34,6 +34,8 @@ class ReviewController {
         const reviewData = req.body;
         
         const data = await reviewService.updateReview(reviewId, reviewData);
+
+        if (!data) return sendResponse(res, 404, "Reseña no encontrada", null);
         sendResponse(res, 200, "Reseña actualizada exitosamente", { data });
     });
 

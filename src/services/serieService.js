@@ -58,7 +58,7 @@ class SerieService {
                 total_rating: 0,
             };
 
-            if (poster_path) delete serieData.poster_path
+            if (!poster_path) delete serieData.poster_path
 
             await serieModel.create(serieData);
             await mediaIdModel.create({tmdb_id: tmdbId, media_type: 'serie'})
