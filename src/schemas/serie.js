@@ -97,4 +97,14 @@ const serieSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now }
 });
 
+serieSchema.virtual('comments_count', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'serie_id',
+    count: true
+});
+
+serieSchema.set('toObject', { virtuals: true });
+serieSchema.set('toJSON', { virtuals: true });
+
 export default mongoose.model("Serie", serieSchema);

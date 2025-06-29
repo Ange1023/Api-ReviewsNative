@@ -26,8 +26,7 @@ class MovieService {
     async getMovieByTmdbId(tmdbId) {
 
         let movieId = await mediaIdModel.findOne({ tmdb_id: tmdbId, media_type: 'movie' });
-        console.log(movieId, 'movieId');
-        
+     
         if (!movieId) {
 
             const tmdbMovie = await tmdbApi.getMovieDetails(tmdbId);
@@ -85,6 +84,7 @@ class MovieService {
         const movie = await movieModel.findOne({ tmdb_id: movieId.tmdb_id });
         if (!movie) return new AppError("No se encontró la película en la base de datos", 404);
         await movie.populate('categories', 'name');
+        await movie.populate('comments_count');
         return movie;
     }
 

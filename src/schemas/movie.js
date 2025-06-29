@@ -85,4 +85,13 @@ const movieSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now }
 });
 
+movieSchema.virtual('comments_count', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'movie_id',
+    count: true
+});
+movieSchema.set('toObject', { virtuals: true });
+movieSchema.set('toJSON', { virtuals: true });
+
 export default mongoose.model("Movie", movieSchema);

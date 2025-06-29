@@ -67,6 +67,7 @@ class SerieService {
         }
         const serie = await serieModel.model
             .findOne({ tmdb_id: serieId.tmdb_id })
+            .populate('comments_count')
             .populate('categories', 'name');
         if (!serie) throw new AppError("No se encontró la serie en la base de datos", 404);
         return serie;
