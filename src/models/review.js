@@ -38,11 +38,11 @@ class reviewModel extends BaseModel {
             }
         }
 
-        const user_rating = userCount ? (userSum / userCount) * 20 : 0;
-        const critic_rating = criticCount ? (criticSum / criticCount) * 20 : 0;
+        const user_rating = userCount ? parseFloat(((userSum / userCount) * 20).toFixed(2)) : 0;
+        const critic_rating = criticCount ? parseFloat(((criticSum / criticCount) * 20).toFixed(2)) : 0;
         const total_rating = (user_rating && critic_rating)
-            ? (user_rating + critic_rating) / 2
-            : (user_rating || critic_rating);
+            ? parseFloat(((user_rating + critic_rating) / 2).toFixed(2))
+            : parseFloat((user_rating || critic_rating).toFixed(2));
 
         await Model.findOneAndUpdate(
             movie_id ? { _id: movie_id } : { _id: serie_id },
